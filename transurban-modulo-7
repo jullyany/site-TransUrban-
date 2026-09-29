@@ -1,0 +1,14 @@
+seu-projeto/
+│
+├── backend/
+│   ├── analise.py
+│   ├── main.py
+│   ├── validacao.py
+│   └── requirements.txt
+│
+├── database/
+│   └── transurban_dados.csv
+│
+└── docs/
+    ├── matriz_perguntas.md
+    └── relatorio_modulo7.md 
