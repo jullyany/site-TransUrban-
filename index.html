@@ -1,0 +1,709 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TransUrban | Mobilidade Urbana</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --azul: #0757c9;
+            --azul-escuro: #063b91;
+            --verde: #11b879;
+            --fundo: #f4f8fc;
+            --branco: #ffffff;
+            --texto: #172033;
+            --cinza: #667085;
+            --borda: #e3eaf2;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--fundo);
+            color: var(--texto);
+        }
+
+        header {
+            background: var(--branco);
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--borda);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            background: var(--azul);
+            color: white;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 25px;
+        }
+
+        .logo h1 {
+            color: var(--azul);
+            font-size: 25px;
+        }
+
+        .logo p {
+            color: var(--cinza);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        nav {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--texto);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: var(--azul);
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #0757c9, #063b91);
+            color: white;
+            padding: 55px 7%;
+        }
+
+        .hero .tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.16);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 18px;
+        }
+
+        .hero h2 {
+            font-size: clamp(28px, 4vw, 42px);
+            max-width: 650px;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            max-width: 650px;
+            line-height: 1.7;
+            color: #e4edff;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            margin-bottom: 18px;
+        }
+
+        .section-title h2 {
+            font-size: 24px;
+            margin-bottom: 7px;
+        }
+
+        .section-title p {
+            color: var(--cinza);
+            line-height: 1.5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--branco);
+            border: 1px solid var(--borda);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(23, 32, 51, 0.04);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 19px;
+        }
+
+        .card-description {
+            color: var(--cinza);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 15px 0 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid var(--borda);
+            border-radius: 9px;
+            font-size: 15px;
+            background: white;
+            color: var(--texto);
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #9bc4ff;
+            border-color: var(--azul);
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            border-radius: 9px;
+            padding: 13px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: var(--azul);
+            color: white;
+            width: 100%;
+            margin-top: 18px;
+        }
+
+        .btn-secondary {
+            background: #eaf2ff;
+            color: var(--azul);
+            margin-top: 10px;
+        }
+
+        .result {
+            display: none;
+            background: #edf9f3;
+            border: 1px solid #bcebd2;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 18px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .bus-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bus-item {
+            border: 1px solid var(--borda);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .bus-item h4 {
+            margin-bottom: 6px;
+        }
+
+        .bus-item p {
+            color: var(--cinza);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .line-code {
+            display: inline-block;
+            background: #eaf2ff;
+            color: var(--azul);
+            font-weight: bold;
+            padding: 7px 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .status {
+            color: #087b4d;
+            background: #e3f8ed;
+            border-radius: 20px;
+            padding: 7px 10px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .alert {
+            border-left: 4px solid #e8a317;
+            background: #fff8e7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .alert strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .feature {
+            background: white;
+            border: 1px solid var(--borda);
+            border-radius: 13px;
+            padding: 20px;
+        }
+
+        .feature .emoji {
+            font-size: 27px;
+            margin-bottom: 12px;
+        }
+
+        .feature h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .feature p {
+            color: var(--cinza);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .wallet {
+            background: linear-gradient(120deg, #063b91, #0757c9);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .wallet p {
+            color: #e4edff;
+            margin-bottom: 10px;
+        }
+
+        .wallet h3 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .wallet button {
+            background: white;
+            color: var(--azul);
+        }
+
+        .note {
+            color: var(--cinza);
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+
+        .favorite-button {
+            background: white;
+            border: 1px solid var(--borda);
+            color: var(--azul);
+            padding: 9px 11px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 35px;
+            background: white;
+            border-top: 1px solid var(--borda);
+            color: var(--cinza);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 750px) {
+            header {
+                padding: 18px 5%;
+            }
+
+            nav {
+                gap: 12px;
+            }
+
+            .hero {
+                padding: 40px 5%;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bus-item {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <div class="logo-icon">🚌</div>
+            <div>
+                <h1>TransUrban</h1>
+                <p>Mobilidade urbana inteligente</p>
+            </div>
+        </div>
+
+        <nav aria-label="Navegação principal">
+            <a href="#viagens">Viagens</a>
+            <a href="#linhas">Linhas</a>
+            <a href="#alertas">Alertas</a>
+            <a href="#recursos">Recursos</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <span class="tag">TRANSPORTE COLETIVO</span>
+        <h2>Seu caminho pela cidade com mais informação.</h2>
+        <p>
+            Consulte linhas de ônibus, planeje suas viagens e acompanhe
+            informações sobre atrasos em Maringá e Sarandi.
+            Mais praticidade para o seu dia a dia.
+        </p>
+    </section>
+
+    <main>
+
+        <section id="viagens">
+            <div class="section-title">
+                <h2>Planeje sua viagem</h2>
+                <p>Informe a origem e o destino para consultar sua rota.</p>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>📍 Encontrar trajeto</h3>
+                    <p class="card-description">
+                        Escolha a cidade, o ponto de partida e o destino.
+                    </p>
+
+                    <form id="form-viagem">
+                        <label for="cidade">Cidade</label>
+                        <select id="cidade" required>
+                            <option value="Maringá">Maringá</option>
+                            <option value="Sarandi">Sarandi</option>
+                        </select>
+
+                        <label for="origem">Ponto de embarque</label>
+                        <input
+                            id="origem"
+                            type="text"
+                            placeholder="Ex.: Terminal Urbano"
+                            required
+                        >
+
+                        <label for="destino">Destino</label>
+                        <input
+                            id="destino"
+                            type="text"
+                            placeholder="Ex.: Universidade"
+                            required
+                        >
+
+                        <button class="btn-primary" type="submit">
+                            Consultar viagem
+                        </button>
+                    </form>
+
+                    <div id="resultado-viagem" class="result" role="status"></div>
+                </div>
+
+                <div class="card" id="alertas">
+                    <h3>🔔 Informações e alertas</h3>
+                    <p class="card-description">
+                        Confira avisos importantes sobre o transporte coletivo.
+                    </p>
+
+                    <div class="alert">
+                        <strong>📊 Análise de atrasos</strong>
+                        O projeto utiliza dados sobre atrasos para estudar
+                        padrões por linha, cidade e período.
+                    </div>
+
+                    <div class="alert">
+                        <strong>🚦 Condições do trânsito</strong>
+                        Informações de trânsito podem ajudar a compreender
+                        possíveis variações no tempo de viagem.
+                    </div>
+
+                    <div class="alert">
+                        <strong>ℹ️ Importante</strong>
+                        Os avisos desta página são demonstrativos.
+                        Eles não representam alertas em tempo real.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="linhas">
+            <div class="section-title">
+                <h2>Linhas de ônibus</h2>
+                <p>Consulte as linhas cadastradas no exemplo do protótipo.</p>
+            </div>
+
+            <div class="card">
+                <div class="bus-list">
+
+                    <div class="bus-item">
+                        <div>
+                            <span class="line-code">007</span>
+                            <h4>Interbairros Zona Norte</h4>
+                            <p>Cidade: Maringá</p>
+                        </div>
+                        <button
+                            class="favorite-button"
+                            type="button"
+                            data-favorito="007"
+                            aria-pressed="false"
+                        >☆ Favoritar</button>
+                    </div>
+
+                    <div class="bus-item">
+                        <div>
+                            <span class="line-code">010</span>
+                            <h4>Universidade</h4>
+                            <p>Cidade: Maringá</p>
+                        </div>
+                        <button
+                            class="favorite-button"
+                            type="button"
+                            data-favorito="010"
+                            aria-pressed="false"
+                        >☆ Favoritar</button>
+                    </div>
+
+                    <div class="bus-item">
+                        <div>
+                            <span class="line-code">021</span>
+                            <h4>Av. Tuiuti</h4>
+                            <p>Cidade: Maringá</p>
+                        </div>
+                        <button
+                            class="favorite-button"
+                            type="button"
+                            data-favorito="021"
+                            aria-pressed="false"
+                        >☆ Favoritar</button>
+                    </div>
+
+                    <div class="bus-item">
+                        <div>
+                            <span class="line-code">201</span>
+                            <h4>Maringá – Iguatemi</h4>
+                            <p>Cidade: Maringá</p>
+                        </div>
+                        <button
+                            class="favorite-button"
+                            type="button"
+                            data-favorito="201"
+                            aria-pressed="false"
+                        >☆ Favoritar</button>
+                    </div>
+
+                </div>
+
+                <p class="note">
+                    As linhas acima são exemplos do projeto. Consulte os dados
+                    oficiais da operadora para confirmar trajetos e horários.
+                </p>
+            </div>
+        </section>
+
+        <section id="recursos">
+            <div class="section-title">
+                <h2>Recursos do TransUrban</h2>
+                <p>Funcionalidades previstas para facilitar a experiência dos passageiros.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="emoji">🗺️</div>
+                    <h3>Rotas e localização</h3>
+                    <p>
+                        Planejamento de trajetos e visualização dos pontos
+                        de embarque e desembarque.
+                    </p>
+                </div>
+
+                <div class="feature">
+                    <div class="emoji">♿</div>
+                    <h3>Acessibilidade</h3>
+                    <p>
+                        Espaço para informações sobre recursos de
+                        acessibilidade disponíveis nos veículos.
+                    </p>
+                </div>
+
+                <div class="feature">
+                    <div class="emoji">👥</div>
+                    <h3>Lotação e avaliações</h3>
+                    <p>
+                        Proposta de avaliações e relatos dos passageiros
+                        sobre as condições das viagens.
+                    </p>
+                </div>
+
+                <div class="feature">
+                    <div class="emoji">🕘</div>
+                    <h3>Histórico de viagens</h3>
+                    <p>
+                        Consulta das viagens anteriores e acesso rápido
+                        a linhas favoritas.
+                    </p>
+                </div>
+
+                <div class="feature">
+                    <div class="emoji">🤖</div>
+                    <h3>Análise de dados e IA</h3>
+                    <p>
+                        Estudo de padrões de atraso e avaliação de técnicas
+                        de inteligência artificial para melhorar estimativas.
+                    </p>
+                </div>
+
+                <div class="feature">
+                    <div class="emoji">🔔</div>
+                    <h3>Notificações</h3>
+                    <p>
+                        Previsão de avisos sobre atrasos e alterações
+                        no serviço, mediante integração com fontes de dados.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="carteira" style="margin-top: 30px;">
+            <div class="section-title">
+                <h2>Carteira digital</h2>
+                <p>Exemplo visual de saldo e recarga de créditos.</p>
+            </div>
+
+            <div class="wallet">
+                <p>Saldo demonstrativo</p>
+                <h3 id="saldo">R$ 25,00</h3>
+
+                <button id="botao-recarga" type="button">
+                    Simular recarga de R$ 10,00
+                </button>
+
+                <p class="note">
+                    Esta carteira é apenas uma simulação.
+                    Nenhum pagamento real é realizado.
+                </p>
+
+                <div id="resultado-recarga" role="status"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <strong>TransUrban 🚌</strong>
+        <p>Projeto de mobilidade urbana para Maringá e Sarandi.</p>
+        <p>
+            Protótipo acadêmico. Horários, rotas, alertas e recargas
+            dependem de integração com fontes e serviços reais.
+        </p>
+        <p>© 2026 TransUrban — Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Consulta demonstrativa de viagem
+        const formulario = document.getElementById("form-viagem");
+        const resultadoViagem = document.getElementById("resultado-viagem");
+
+        formulario.addEventListener("submit", function(evento) {
+            evento.preventDefault();
+
+            const cidade = document.getElementById("cidade").value;
+            const origem = document.getElementById("origem").value.trim();
+            const destino = document.getElementById("destino").value.trim();
+
+            resultadoViagem.style.display = "block";
+            resultadoViagem.textContent =
+                `Consulta registrada! Cidade: ${cidade}. ` +
+                `Origem: ${origem}. Destino: ${destino}. ` +
+                `A busca de linhas e estimativas reais precisa ser conectada ` +
+                `ao banco de dados e aos serviços de transporte.`;
+        });
+
+        // Favoritar e desfavoritar linhas
+        document.querySelectorAll("[data-favorito]").forEach(function(botao) {
+            botao.addEventListener("click", function() {
+                const ativo = botao.getAttribute("aria-pressed") === "true";
+
+                botao.setAttribute("aria-pressed", String(!ativo));
+                botao.textContent = ativo ? "☆ Favoritar" : "★ Favoritado";
+            });
+        });
+
+        // Carteira digital demonstrativa
+        let saldoAtual = 25;
+
+        document.getElementById("botao-recarga").addEventListener("click", function() {
+            saldoAtual += 10;
+
+            document.getElementById("saldo").textContent =
+                saldoAtual.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL"
+                });
+
+            document.getElementById("resultado-recarga").textContent =
+                "Recarga simulada concluída. Nenhum pagamento real foi realizado.";
+        });
+    </script>
+
+</body>
+</html>
